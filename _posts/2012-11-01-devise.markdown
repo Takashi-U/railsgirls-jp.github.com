@@ -6,10 +6,9 @@ permalink: devise
 
 # Devise で認証機能を追加
 
-*Created by Piotr Steininger, [@polishprince](https://twitter.com/polishprince)*
+*Created by Piotr Steininger, [@polishprince](https://twitter.com/polishprince),Updated by Takashi Uchibe*
 
 ** このガイドは、すでに [ RailsGirls アプリ・チュートリアル ](/app) でアプリを作った方を対象にしています。 **
-
 
 
 ## Step 0: devise gem を追加
@@ -37,13 +36,25 @@ gem のインストールができました。Rails のサーバーを再起動�
 rails g devise:install
 {% endhighlight %}
 
-Then add this line to your `app/models/user.rb`:
+## Step 2: User model をセットアップ
 
-{% highlight ruby %}
-attr_accessible :email, :password, :password_confirmation
+Deviseユーザー用にセットアップされた User model を作るために bundled generator script を使います。
+
+{% highlight sh %}
+   rails g devise user
 {% endhighlight %}
 
-## Step 2: Devise の環境設定
+db/migrate ディレクトリにも migration が追加されます。
+
+ここで、
+
+{% highlight sh %}
+  rake db:migrate
+{% endhighlight %}
+
+を実行してデータベースをセットアップしておきましょう。
+
+## Step 3: Devise の環境設定
 
 environments ファイルにデフォルトの url オプションを定義します。
 `config/environments/development.rb` を開いて次の行を追加しましょう。
@@ -53,13 +64,6 @@ environments ファイルにデフォルトの url オプションを定義し�
 {% endhighlight %}
 
 `end` と書かれているところの前に追加してください。
-
-次は `config/routes.rb` を開いて次の行を追加します。
-{% highlight ruby %}
-   root :to => "home#index"
-{% endhighlight %}
-
-これも `end` の前に追加してください。
 
 さらに `app/views/layouts/application.html.erb` を開いて、
 
@@ -83,25 +87,6 @@ environments ファイルにデフォルトの url オプションを定義し�
 これは下から３行目（2つ目の `end` の上）に追加してください。
 
 
-## Step 3: User model をセットアップ
-
-Deviseユーザー用にセットアップされた User model を作るために bundled generator script を使います。
-
-{% highlight sh %}
-   rails g devise user
-{% endhighlight %}
-
-新しい `app/models/user.rb` のためにいくつか変更が加えられ、 db/migrate ディレクトリにも migration が追加されます。
-
-ここで、
-
-{% highlight sh %}
-  rake db:migrate
-{% endhighlight %}
-
-を実行してデータベースをセットアップしておきましょう。
-
-
 ## Step 4: ユーザーを作成
 
 User model の設定の仕方によっては、ブラウザ上で簡単に user アカウントを登録することができます。
@@ -116,7 +101,7 @@ User model の設定の仕方によっては、ブラウザ上で簡単に user 
 上記のコマンドを実行したら、次のコマンドを実行して user を設定します。（email等の値は好きなように変更してください。rails consoleを終了するには、exitと入力します。）
 
 {% highlight ruby %}
- User.create(:email=>"me@example.com",:password => "test123", :password_confirmation => "test123")
+ User.create(:email=>"me@example.com",:password => "test1234", :password_confirmation => "test1234")
 {% endhighlight %}
 
 これで [http://localhost:3000/users/sign_in](http://localhost:3000/users/sign_in) にログインすることができます。
@@ -172,5 +157,3 @@ User model の設定の仕方によっては、ブラウザ上で簡単に user 
 * users と ideas 間のリレーションを追加しましょう。
 * それぞれ自分の ideas だけ編集できるように users に制限をかけましょう。
 * ロールやパーミッションを使うように拡張しましょう。（ CanCan のような人気の認証 gem も使ってみてください。）
-
-
